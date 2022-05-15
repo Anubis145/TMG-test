@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dashboard_navigation"
+    app:startDestination="@id/leaderListFragment">
+
+    <fragment
+        android:id="@+id/leaderListFragment"
+        android:name="com.example.tmg_test.ui.main.leaderList.LeaderListFragment"
+        android:label="fragment_leader_list"
+        tools:layout="@layout/fragment_leader_list" />
+    <fragment
+        android:id="@+id/gamesFragment"
+        android:name="com.example.tmg_test.ui.main.games.GamesFragment"
+        android:label="GamesFragment" >
+        <action
+            android:id="@+id/gamesFragment_to_recordGame"
+            app:destination="@id/editGameFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playersFragment"
+        android:name="com.example.tmg_test.ui.main.players.PlayersFragment"
+        android:label="PlayersFragment" >
+        <action
+            android:id="@+id/playersFragment_to_addPlayerFragment"
+            app:destination="@id/addPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addPlayerFragment"
+        android:name="com.example.tmg_test.ui.main.players.addPlayer.AddPlayerFragment"
+        android:label="AddPlayerFragment" />
+    <fragment
+        android:id="@+id/editGameFragment"
+        android:name="com.example.tmg_test.ui.main.games.editGame.EditGameFragment"
+        android:label="EditGameFragment" />
+</navigation>

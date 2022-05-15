@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/screenBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/first_player"
+                android:textColor="@color/textColor"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vEditGameFragmentFirstPlayerScore"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="120dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                app:hintTextColor="#4AAA64"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/screenBackground"
+                    android:hint="Score"
+                    android:inputType="number"
+                    android:textColor="@color/textColor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Spinner
+                android:id="@+id/vEditGameFragmentFirstPlayersSpinner"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/spinner_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/vEditGameFragmentFirstPlayerScore"
+                app:layout_constraintEnd_toStartOf="@+id/vEditGameFragmentFirstPlayerScore"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/vEditGameFragmentFirstPlayerScore" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        tools:layout_editor_absoluteX="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/second_player"
+                android:textColor="@color/textColor"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/vEditGameFragmentSecondPlayerScore"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="120dp"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
+                app:hintTextColor="#4AAA64"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/screenBackground"
+                    android:hint="Score"
+                    android:inputType="number"
+                    android:textColor="@color/textColor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Spinner
+                android:id="@+id/vEditGameFragmentSecondPlayersSpinner"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="40dp"
+                android:background="@drawable/spinner_gray"
+                app:layout_constraintBottom_toBottomOf="@+id/vEditGameFragmentSecondPlayerScore"
+                app:layout_constraintEnd_toStartOf="@+id/vEditGameFragmentSecondPlayerScore"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/vEditGameFragmentSecondPlayerScore" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/vEditGameFragmentSave"
+        style="@style/AppButton.Green"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/save"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/vEditGameFragmentCancel"
+        style="@style/AppButton.White"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:text="@string/cancel"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/vEditGameFragmentSave" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

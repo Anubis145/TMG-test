@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">TMG-Test</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="leaders">Leaders</string>
+    <string name="games">Games</string>
+    <string name="players">Players</string>
+    <string name="add_player">+ Add Player</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_name_not_valid">Name is not valid</string>
+    <string name="record_game">+ Record Game</string>
+    <string name="first_player">First Player</string>
+    <string name="second_player">Second Player</string>
+    <string name="error_you_should_choose_two_players">You should choose two players</string>
+    <string name="error_choose_different_players">Choose two different players</string>
+    <string name="error_one_player_one_score_point">At least one player must have at least one score point</string>
+    <string name="choose_sort_type">Choose sort type</string>
+</resources>

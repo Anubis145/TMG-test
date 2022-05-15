@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="@string/leaders"
+        android:icon="@drawable/ic_leaderboard"
+        android:id="@+id/leaderListFragment" />
+
+    <item
+        android:title="@string/games"
+        android:icon="@drawable/ic_game_history"
+        android:id="@+id/gamesFragment" />
+
+    <item
+        android:title="@string/players"
+        android:icon="@drawable/ic_players"
+        android:id="@+id/playersFragment" />
+</menu>
