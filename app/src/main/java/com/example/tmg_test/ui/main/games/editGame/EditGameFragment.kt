@@ -8,25 +8,36 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.tmg_test.R
+import com.example.tmg_test.databinding.FragmentEditGameBinding
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.ui.base.BaseFragment
 import com.example.tmg_test.utils.doOnTextChange
 import com.example.tmg_test.utils.observeFlow
 import com.example.tmg_test.utils.setText
-import kotlinx.android.synthetic.main.fragment_edit_game.*
 
 class EditGameFragment : BaseFragment() {
 
-    val vm: EditGameVM by viewModels()
+    val vm: EditGameViewModel by viewModels()
+    lateinit var bind: FragmentEditGameBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_edit_game, container, false)
+    lateinit var firstPlayerSpinnerAdapter: ArrayAdapter<String>
+    lateinit var secondPlayerSpinnerAdapter: ArrayAdapter<String>
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        bind = FragmentEditGameBinding.inflate(inflater, container, false)
+        return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initFirstPlayerSpinner()
+        initSecondPlayerSpinner()
+
         initListeners()
         observeViewModel()
     }
@@ -36,72 +47,84 @@ class EditGameFragment : BaseFragment() {
         observeFlow(vm.event, ::event)
     }
 
-    private fun event(event: EditGameVM.EditGameEvent?) {
-        when(event){
-            is EditGameVM.EditGameEvent.CloseFragment ->
+    private fun event(event: EditGameViewModel.EditGameEvent?) {
+        when (event) {
+            is EditGameViewModel.EditGameEvent.CloseFragment ->
                 findNavController().popBackStack()
-            is EditGameVM.EditGameEvent.Error -> {
+            is EditGameViewModel.EditGameEvent.Error -> {
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun render(viewState: EditGameVM.EditGameViewState?) {
-        when(viewState){
-            is EditGameVM.EditGameViewState.SelectedEditGameModel ->{
-                vEditGameFragmentFirstPlayerScore.setText(viewState.selectedModel.firstPlayerScore.toString())
-                vEditGameFragmentSecondPlayerScore.setText(viewState.selectedModel.secondPlayerScore.toString())
+    private fun render(viewState: EditGameViewModel.EditGameViewState?) {
+        when (viewState) {
+            is EditGameViewModel.EditGameViewState.SelectedEditGameModel -> {
+                bind.editGameFragmentFirstPlayerScore.setText(viewState.selectedModel.firstPlayerScore.toString())
+                bind.editGameFragmentSecondPlayerScore.setText(viewState.selectedModel.secondPlayerScore.toString())
 
-                initFirstPlayerSpinner(viewState.playersList, viewState.selectedModel.firstPlayer)
-                initSecondPlayerSpinner(viewState.playersList, viewState.selectedModel.secondPlayer)
+                updateFirstPlayerSpinner(viewState.playersListNames, viewState.selectedModel.firstPlayer.name)
+                updateSecondPlayerSpinner(viewState.playersListNames, viewState.selectedModel.secondPlayer.name)
             }
-            is EditGameVM.EditGameViewState.PlayersList ->{
-                initFirstPlayerSpinner(viewState.playersList)
-                initSecondPlayerSpinner(viewState.playersList)
+            is EditGameViewModel.EditGameViewState.PlayersList -> {
+                updateFirstPlayerSpinner(viewState.playersListNames)
+                updateSecondPlayerSpinner(viewState.playersListNames)
             }
         }
     }
 
-    private fun initSecondPlayerSpinner(
-        playersList: List<PlayerModel>,
-        selectedPlayerModel: PlayerModel? = null
-    ) {
-        val playersNamesList = playersList.map { it.name }
-        val playersAdapter = ArrayAdapter(requireContext(), R.layout.spinner_custom, playersNamesList)
-        vEditGameFragmentSecondPlayersSpinner.adapter = playersAdapter
-
-        vEditGameFragmentSecondPlayersSpinner.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                vm.onSecondPlayerSelect(playersList[position])
-            }
-        })
-
-        vEditGameFragmentSecondPlayersSpinner.setSelection(playersList.indexOf(selectedPlayerModel))
+    private fun updateSecondPlayerSpinner(playerList: List<String>, selectedPlayerName: String = "") {
+        secondPlayerSpinnerAdapter.clear()
+        secondPlayerSpinnerAdapter.addAll(playerList)
+        bind.editGameFragmentSecondPlayersSpinner.setSelection(playerList.indexOf(selectedPlayerName))
     }
 
-    private fun initFirstPlayerSpinner(
-        playersList: List<PlayerModel>,
-        selectedPlayerModel: PlayerModel? = null
-    ) {
-        val playersNamesList = playersList.map { it.name }
-        val playersAdapter = ArrayAdapter(requireContext(), R.layout.spinner_custom, playersNamesList)
-        vEditGameFragmentFirstPlayersSpinner.adapter = playersAdapter
+    private fun updateFirstPlayerSpinner(playerList: List<String>, selectedPlayerName: String = "") {
+        firstPlayerSpinnerAdapter.clear()
+        firstPlayerSpinnerAdapter.addAll(playerList)
+        bind.editGameFragmentFirstPlayersSpinner.setSelection(playerList.indexOf(selectedPlayerName))
+    }
 
-        vEditGameFragmentFirstPlayersSpinner.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                vm.onFirstPlayerSelect(playersList[position])
-            }
-        })
+    private fun initSecondPlayerSpinner() {
+        secondPlayerSpinnerAdapter = ArrayAdapter(requireContext(), R.layout.spinner_custom, listOf())
+        bind.editGameFragmentSecondPlayersSpinner.adapter = secondPlayerSpinnerAdapter
 
-        vEditGameFragmentFirstPlayersSpinner.setSelection(playersList.indexOf(selectedPlayerModel))
+        bind.editGameFragmentSecondPlayersSpinner.onItemSelectedListener =
+            (object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    vm.onSecondPlayerSelect(position)
+                }
+            })
+    }
+
+    private fun initFirstPlayerSpinner() {
+        firstPlayerSpinnerAdapter = ArrayAdapter(requireContext(), R.layout.spinner_custom, listOf())
+        bind.editGameFragmentFirstPlayersSpinner.adapter = firstPlayerSpinnerAdapter
+
+        bind.editGameFragmentFirstPlayersSpinner.onItemSelectedListener =
+            (object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    vm.onFirstPlayerSelect(position)
+                }
+            })
     }
 
     private fun initListeners() {
-        vEditGameFragmentFirstPlayerScore.doOnTextChange { vm.onFirstPlayerScoreChange(it) }
-        vEditGameFragmentSecondPlayerScore.doOnTextChange { vm.onSecondPlayerScoreChange(it) }
-        vEditGameFragmentSave.setOnClickListener { vm.onSaveClick() }
-        vEditGameFragmentCancel.setOnClickListener { vm.onCancelClick() }
+        bind.editGameFragmentFirstPlayerScore.doOnTextChange { vm.onFirstPlayerScoreChange(it) }
+        bind.editGameFragmentSecondPlayerScore.doOnTextChange { vm.onSecondPlayerScoreChange(it) }
+        bind.editGameFragmentSave.setOnClickListener { vm.onSaveClick() }
+        bind.editGameFragmentCancel.setOnClickListener { vm.onCancelClick() }
     }
 }

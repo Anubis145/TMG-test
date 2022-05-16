@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.tmg_test.R
+import com.example.tmg_test.databinding.DialogSortTypeBinding
 import com.example.tmg_test.ui.base.BaseDialogFragment
 import com.example.tmg_test.utils.SORT_TYPE_GAMES
 import com.example.tmg_test.utils.SORT_TYPE_WINS
-import kotlinx.android.synthetic.main.dialog_sort_type.*
 
 class SortTypeDialog(
     var selectedSortType: String,
@@ -16,9 +16,15 @@ class SortTypeDialog(
 ) : BaseDialogFragment() {
 
     private var newSelectedSortType: String = selectedSortType
+    lateinit var bind: DialogSortTypeBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.dialog_sort_type, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        bind = DialogSortTypeBinding.inflate(inflater, container, false)
+        return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,23 +35,23 @@ class SortTypeDialog(
     }
 
     private fun initView() {
-        vSortTypeDialogToggleGroup.check(
-            if(selectedSortType == SORT_TYPE_WINS)
-                R.id.vSortTypeDialogWinsCheck
+        bind.sortTypeDialogToggleGroup.check(
+            if (selectedSortType == SORT_TYPE_WINS)
+                R.id.sortTypeDialogWinsCheck
             else
-                R.id.vSortTypeDialogGamesCheck
+                R.id.sortTypeDialogGamesCheck
         )
     }
 
     private fun initListeners() {
-        vSortTypeDialogWinsCheck.setOnClickListener { newSelectedSortType = SORT_TYPE_WINS }
-        vSortTypeDialogGamesCheck.setOnClickListener { newSelectedSortType = SORT_TYPE_GAMES }
+        bind.sortTypeDialogWinsCheck.setOnClickListener { newSelectedSortType = SORT_TYPE_WINS }
+        bind.sortTypeDialogGamesCheck.setOnClickListener { newSelectedSortType = SORT_TYPE_GAMES }
 
-        vSortTypeDialogImageClose.setOnClickListener { dismiss() }
-        vSortTypeDialogSave.setOnClickListener {
+        bind.sortTypeDialogImageClose.setOnClickListener { dismiss() }
+        bind.sortTypeDialogSave.setOnClickListener {
             savedCallback(newSelectedSortType)
             dismiss()
         }
-        vSortTypeDialogButtonClose.setOnClickListener { dismiss() }
+        bind.sortTypeDialogButtonClose.setOnClickListener { dismiss() }
     }
 }

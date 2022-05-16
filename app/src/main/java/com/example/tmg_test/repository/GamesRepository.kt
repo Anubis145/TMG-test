@@ -26,5 +26,4 @@ interface GamesRepository {
 
     @Query("SELECT * FROM GameModel WHERE secondPlayerModelname = :name OR firstPlayerModelname = :name")
     fun getPlayedCountByPlayerName(name: String) : Flowable<List<GameModel>>
-
 }

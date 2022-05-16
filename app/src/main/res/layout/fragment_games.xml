@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/vGamesFragmentRecordGame"
+        android:id="@+id/gamesFragmentRecordGame"
         style="@style/AppButton.Green"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
@@ -19,11 +19,11 @@
         tools:layout_editor_absoluteX="16dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/vGamesFragmentGamesRecycler"
+        android:id="@+id/gamesFragmentGamesRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vGamesFragmentRecordGame" />
+        app:layout_constraintTop_toBottomOf="@+id/gamesFragmentRecordGame" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,7 +16,6 @@ abstract class BaseDialogFragment : DialogFragment() {
     @Inject
     lateinit var localRepository: LocalRepository
 
-
     override fun onResume() {
         super.onResume()
         val inset = InsetDrawable(ColorDrawable(Color.TRANSPARENT), 56)

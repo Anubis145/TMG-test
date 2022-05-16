@@ -1,11 +1,11 @@
 package com.example.tmg_test.ui.main.players
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmg_test.R
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.repository.PlayersRepository
 import com.example.tmg_test.repository.SchedulersRepository
-import com.example.tmg_test.ui.base.BaseViewModel
 import com.example.tmg_test.utils.emitFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -16,10 +16,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlayersVM @Inject constructor(
+class PlayersViewModel @Inject constructor(
     private val playersRepository: PlayersRepository,
     private val schedulersRepository: SchedulersRepository,
-) : BaseViewModel() {
+) : ViewModel() {
 
     private val _viewState = MutableStateFlow<PlayersViewState>(PlayersViewState.Default)
     val viewState = _viewState.asSharedFlow()
@@ -56,18 +56,18 @@ class PlayersVM @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        if(compositeDisposable != null){
+        if (compositeDisposable != null) {
             compositeDisposable?.clear()
             compositeDisposable = null
         }
     }
 
-
-    sealed class PlayersViewState{
+    sealed class PlayersViewState {
         object Default : PlayersViewState()
         data class PlayersList(var playersList: List<PlayerModel>) : PlayersViewState()
     }
-    sealed class PlayersEvent{
+
+    sealed class PlayersEvent {
         data class OpenFragment(var fragmentId: Int) : PlayersEvent()
         data class Error(var message: String?) : PlayersEvent()
     }

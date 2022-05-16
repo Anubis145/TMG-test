@@ -9,7 +9,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/vAddPlayerFragmentName"
+        android:id="@+id/addPlayerFragmentName"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="55dp"
@@ -24,22 +24,22 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/vAddPlayerFragmentSave"
+        android:id="@+id/addPlayerFragmentSave"
         style="@style/AppButton.Green"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:layout_marginTop="16dp"
         android:text="@string/save"
-        app:layout_constraintTop_toBottomOf="@+id/vAddPlayerFragmentName"
+        app:layout_constraintTop_toBottomOf="@+id/addPlayerFragmentName"
         tools:layout_editor_absoluteX="16dp" />
 
     <Button
-        android:id="@+id/vAddPlayerFragmentCancel"
+        android:id="@+id/addPlayerFragmentCancel"
         style="@style/AppButton.White"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/cancel"
-        app:layout_constraintTop_toBottomOf="@+id/vAddPlayerFragmentSave"
+        app:layout_constraintTop_toBottomOf="@+id/addPlayerFragmentSave"
         tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

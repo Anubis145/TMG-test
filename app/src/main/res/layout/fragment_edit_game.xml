@@ -33,7 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/vEditGameFragmentFirstPlayerScore"
+                android:id="@+id/editGameFragmentFirstPlayerScore"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="120dp"
                 android:layout_height="55dp"
@@ -52,16 +52,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
-                android:id="@+id/vEditGameFragmentFirstPlayersSpinner"
+                android:id="@+id/editGameFragmentFirstPlayersSpinner"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="40dp"
                 android:background="@drawable/spinner_gray"
-                app:layout_constraintBottom_toBottomOf="@+id/vEditGameFragmentFirstPlayerScore"
-                app:layout_constraintEnd_toStartOf="@+id/vEditGameFragmentFirstPlayerScore"
+                app:layout_constraintBottom_toBottomOf="@+id/editGameFragmentFirstPlayerScore"
+                app:layout_constraintEnd_toStartOf="@+id/editGameFragmentFirstPlayerScore"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/vEditGameFragmentFirstPlayerScore" />
+                app:layout_constraintTop_toTopOf="@+id/editGameFragmentFirstPlayerScore" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
@@ -92,7 +92,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/vEditGameFragmentSecondPlayerScore"
+                android:id="@+id/editGameFragmentSecondPlayerScore"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="120dp"
                 android:layout_height="55dp"
@@ -111,21 +111,21 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
-                android:id="@+id/vEditGameFragmentSecondPlayersSpinner"
+                android:id="@+id/editGameFragmentSecondPlayersSpinner"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="40dp"
                 android:background="@drawable/spinner_gray"
-                app:layout_constraintBottom_toBottomOf="@+id/vEditGameFragmentSecondPlayerScore"
-                app:layout_constraintEnd_toStartOf="@+id/vEditGameFragmentSecondPlayerScore"
+                app:layout_constraintBottom_toBottomOf="@+id/editGameFragmentSecondPlayerScore"
+                app:layout_constraintEnd_toStartOf="@+id/editGameFragmentSecondPlayerScore"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/vEditGameFragmentSecondPlayerScore" />
+                app:layout_constraintTop_toTopOf="@+id/editGameFragmentSecondPlayerScore" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
     <Button
-        android:id="@+id/vEditGameFragmentSave"
+        android:id="@+id/editGameFragmentSave"
         style="@style/AppButton.Green"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
@@ -136,12 +136,12 @@
         tools:layout_editor_absoluteX="16dp" />
 
     <Button
-        android:id="@+id/vEditGameFragmentCancel"
+        android:id="@+id/editGameFragmentCancel"
         style="@style/AppButton.White"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:text="@string/cancel"
         android:layout_marginHorizontal="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/vEditGameFragmentSave" />
+        app:layout_constraintTop_toBottomOf="@+id/editGameFragmentSave" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

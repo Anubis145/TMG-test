@@ -31,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/vSortTypeDialogImageClose"
+            android:id="@+id/sortTypeDialogImageClose"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
@@ -42,7 +42,7 @@
     </FrameLayout>
 
     <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/vSortTypeDialogToggleGroup"
+        android:id="@+id/sortTypeDialogToggleGroup"
         app:singleSelection="true"
         app:selectionRequired="true"
         android:layout_width="match_parent"
@@ -52,14 +52,14 @@
         android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@+id/frame">
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/vSortTypeDialogWinsCheck"
+            android:id="@+id/sortTypeDialogWinsCheck"
             android:layout_weight="1"
             android:backgroundTint="@color/bottom_navigation_buttons_color"
             android:text="Wins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/vSortTypeDialogGamesCheck"
+            android:id="@+id/sortTypeDialogGamesCheck"
             android:layout_weight="1"
             android:text="Games"
             android:backgroundTint="@color/bottom_navigation_buttons_color"
@@ -68,24 +68,24 @@
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <Button
-        android:id="@+id/vSortTypeDialogSave"
+        android:id="@+id/sortTypeDialogSave"
         style="@style/AppButton.Green"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
         android:text="@string/save"
-        app:layout_constraintTop_toBottomOf="@+id/vSortTypeDialogToggleGroup"
+        app:layout_constraintTop_toBottomOf="@+id/sortTypeDialogToggleGroup"
         tools:layout_editor_absoluteX="16dp" />
     <Button
-        android:id="@+id/vSortTypeDialogButtonClose"
+        android:id="@+id/sortTypeDialogButtonClose"
         style="@style/AppButton.White"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:layout_marginHorizontal="16dp"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vSortTypeDialogSave"
+        app:layout_constraintTop_toBottomOf="@+id/sortTypeDialogSave"
         tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,23 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.tmg_test.R
+import com.example.tmg_test.databinding.FragmentPlayersBinding
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.ui.adapter.PlayersListAdapter
 import com.example.tmg_test.ui.base.BaseFragment
 import com.example.tmg_test.utils.observeFlow
-import kotlinx.android.synthetic.main.fragment_players.*
 
 class PlayersFragment : BaseFragment() {
 
-    val vm: PlayersVM by viewModels()
+    val vm: PlayersViewModel by viewModels()
+    lateinit var bind: FragmentPlayersBinding
 
     private lateinit var playersAdapter: PlayersListAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_players, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        bind = FragmentPlayersBinding.inflate(inflater, container, false)
+        return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,19 +44,19 @@ class PlayersFragment : BaseFragment() {
         observeFlow(vm.event, ::event)
     }
 
-    private fun event(event: PlayersVM.PlayersEvent) {
-        when(event){
-            is PlayersVM.PlayersEvent.OpenFragment-> {
+    private fun event(event: PlayersViewModel.PlayersEvent) {
+        when (event) {
+            is PlayersViewModel.PlayersEvent.OpenFragment -> {
                 findNavController().navigate(event.fragmentId)
             }
-            is PlayersVM.PlayersEvent.Error->
+            is PlayersViewModel.PlayersEvent.Error ->
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun render(viewState: PlayersVM.PlayersViewState) {
-        when(viewState){
-            is PlayersVM.PlayersViewState.PlayersList->{
+    private fun render(viewState: PlayersViewModel.PlayersViewState) {
+        when (viewState) {
+            is PlayersViewModel.PlayersViewState.PlayersList -> {
                 initPlayersRecyclerView(viewState.playersList)
             }
         }
@@ -61,10 +65,10 @@ class PlayersFragment : BaseFragment() {
     private fun initPlayersRecyclerView(playersList: List<PlayerModel>) {
         playersAdapter = PlayersListAdapter(playersList)
 
-        vPlayersFragmentPlayerList.adapter = playersAdapter
+        bind.playersFragmentPlayerList.adapter = playersAdapter
     }
 
-    private fun initListeners(){
-        vPlayersFragmentAddPlayer.setOnClickListener { vm.onAddPlayerClick() }
+    private fun initListeners() {
+        bind.playersFragmentAddPlayer.setOnClickListener { vm.onAddPlayerClick() }
     }
 }

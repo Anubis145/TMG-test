@@ -21,7 +21,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
 
-
     @Provides
     @Singleton
     fun provideSchedulersRepository(): SchedulersRepository {
@@ -32,7 +31,6 @@ class AppModule {
     fun provideResourceRepository(@ApplicationContext context: Context): ResourceRepository {
         return ResourceRepositoryImpl(context)
     }
-
 
     @Singleton
     @Provides

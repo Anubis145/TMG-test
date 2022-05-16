@@ -6,22 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.tmg_test.R
+import com.example.tmg_test.databinding.FragmentAddPlayerBinding
 import com.example.tmg_test.ui.base.BaseFragment
 import com.example.tmg_test.utils.getText
 import com.example.tmg_test.utils.observeFlow
-import kotlinx.android.synthetic.main.fragment_add_player.*
-import kotlinx.coroutines.flow.collectLatest
 
 class AddPlayerFragment : BaseFragment() {
 
-    val vm: AddPlayerVM by viewModels()
+    val vm: AddPlayerViewModel by viewModels()
+    lateinit var bind: FragmentAddPlayerBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_add_player, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        bind = FragmentAddPlayerBinding.inflate(inflater, container, false)
+        return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -29,20 +31,20 @@ class AddPlayerFragment : BaseFragment() {
         initListeners()
     }
 
-    private fun observeViewModel(){
+    private fun observeViewModel() {
         observeFlow(vm.event, ::event)
     }
 
-    private fun event(event: AddPlayerVM.AddPlayerEvent?) {
-        when(event){
-            is AddPlayerVM.AddPlayerEvent.CloseFragment -> findNavController().popBackStack()
-            is AddPlayerVM.AddPlayerEvent.Error ->
+    private fun event(event: AddPlayerViewModel.AddPlayerEvent?) {
+        when (event) {
+            is AddPlayerViewModel.AddPlayerEvent.CloseFragment -> findNavController().popBackStack()
+            is AddPlayerViewModel.AddPlayerEvent.Error ->
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun initListeners() {
-        vAddPlayerFragmentSave.setOnClickListener { vm.onSaveClick(vAddPlayerFragmentName.getText()) }
-        vAddPlayerFragmentCancel.setOnClickListener { vm.onCancelClick() }
+        bind.addPlayerFragmentSave.setOnClickListener { vm.onSaveClick(bind.addPlayerFragmentName.getText()) }
+        bind.addPlayerFragmentCancel.setOnClickListener { vm.onCancelClick() }
     }
 }

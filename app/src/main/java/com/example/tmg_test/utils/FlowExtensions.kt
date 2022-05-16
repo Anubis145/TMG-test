@@ -2,8 +2,6 @@ package com.example.tmg_test.utils
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
-import com.example.tmg_test.ui.base.BaseViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

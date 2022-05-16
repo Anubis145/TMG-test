@@ -8,7 +8,7 @@
     tools:context=".ui.main.leaderList.LeaderListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/vLeaderListFragmentRecycler"
+        android:id="@+id/leaderListFragmentRecycler"
         tools:listitem="@layout/item_players_list"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"

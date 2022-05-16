@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/vPlayersFragmentAddPlayer"
+        android:id="@+id/playersFragmentAddPlayer"
         android:text="@string/add_player"
         style="@style/AppButton.Green"
         android:layout_width="match_parent"
@@ -18,12 +18,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/vPlayersFragmentPlayerList"
+        android:id="@+id/playersFragmentPlayerList"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vPlayersFragmentAddPlayer"
+        app:layout_constraintTop_toBottomOf="@+id/playersFragmentAddPlayer"
         tools:layout_editor_absoluteX="16dp"
         tools:listitem="@layout/item_players_list" />
 

@@ -5,7 +5,6 @@ import io.reactivex.schedulers.Schedulers
 
 class SchedulersRepository(private val uiScheduler: Scheduler, private val ioScheduler: Scheduler) {
 
-
     fun <T> flowableTransformer(): FlowableTransformer<T, T> =
         FlowableTransformer { upstream ->
             upstream
@@ -41,3 +40,4 @@ class SchedulersRepository(private val uiScheduler: Scheduler, private val ioSch
                 .observeOn(Schedulers.computation())
         }
 }
+

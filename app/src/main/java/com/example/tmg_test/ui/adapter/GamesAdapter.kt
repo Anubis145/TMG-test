@@ -5,13 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmg_test.R
+import com.example.tmg_test.databinding.ItemGameRecordBinding
 import com.example.tmg_test.model.GameModel
-import kotlinx.android.synthetic.main.item_game_record.view.*
 
 class GamesAdapter(
     val items: List<GameModel>,
     val gameClickListener: (GameModel) -> Unit
 ) : RecyclerView.Adapter<GamesAdapter.GamesViewHolder>() {
+
+    lateinit var bind: ItemGameRecordBinding
 
     init {
         setHasStableIds(true)
@@ -20,22 +22,19 @@ class GamesAdapter(
     override fun getItemId(position: Int): Long = items[position].id.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GamesViewHolder {
-        return GamesViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_game_record, parent, false)
-        )
+        bind = ItemGameRecordBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return GamesViewHolder(bind.root)
     }
 
     override fun onBindViewHolder(holder: GamesViewHolder, position: Int) {
         val item = items[position]
 
-        holder.itemView.apply {
-            vGameRecordItemFirstPlayerName.text = item.firstPlayer.name
-            vGameRecordItemFirstPlayerScore.text = item.firstPlayerScore.toString()
-            vGameRecordItemSecondPlayerName.text = item.secondPlayer.name
-            vGameRecordItemSecondPlayerScore.text = item.secondPlayerScore.toString()
+        bind.gameRecordItemFirstPlayerName.text = item.firstPlayer.name
+        bind.gameRecordItemFirstPlayerScore.text = item.firstPlayerScore.toString()
+        bind.gameRecordItemSecondPlayerName.text = item.secondPlayer.name
+        bind.gameRecordItemSecondPlayerScore.text = item.secondPlayerScore.toString()
 
-            setOnClickListener { gameClickListener(item) }
-        }
+        holder.itemView.setOnClickListener { gameClickListener(item) }
     }
 
     override fun getItemCount(): Int = items.size

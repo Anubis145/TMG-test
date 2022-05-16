@@ -1,12 +1,12 @@
 package com.example.tmg_test.ui.main.leaderList
 
+import androidx.lifecycle.ViewModel
 import com.example.tmg_test.model.GameModel
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.repository.GamesRepository
 import com.example.tmg_test.repository.LocalRepository
 import com.example.tmg_test.repository.PlayersRepository
 import com.example.tmg_test.repository.SchedulersRepository
-import com.example.tmg_test.ui.base.BaseViewModel
 import com.example.tmg_test.utils.SORT_TYPE_GAMES
 import com.example.tmg_test.utils.SORT_TYPE_WINS
 import com.example.tmg_test.utils.emitFlow
@@ -18,12 +18,12 @@ import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class LeaderListVM @Inject constructor(
+class LeaderListViewModel @Inject constructor(
     private val schedulersRepository: SchedulersRepository,
     private val gamesRepository: GamesRepository,
     private val playersRepository: PlayersRepository,
     private val localRepository: LocalRepository,
-) : BaseViewModel() {
+) : ViewModel() {
 
     private val _viewState = MutableStateFlow<LeadersViewState>(LeadersViewState.Default)
     val viewState = _viewState.asSharedFlow()
@@ -67,7 +67,7 @@ class LeaderListVM @Inject constructor(
             .subscribe({
                 allGamesList = it
 
-                val leadersList: List<PlayerModel> = when(newSelectedSortType){
+                val leadersList: List<PlayerModel> = when (newSelectedSortType) {
                     SORT_TYPE_WINS -> {
                         sortPlayersByWins(allPlayersList, allGamesList)
                     }
@@ -82,7 +82,7 @@ class LeaderListVM @Inject constructor(
         compositeDisposable?.add(disposable)
     }
 
-    private fun error(t: Throwable){
+    private fun error(t: Throwable) {
         emitFlow(_event, LeadersEvent.Error(t.message))
     }
 
@@ -93,11 +93,12 @@ class LeaderListVM @Inject constructor(
         val playerAndWinPair = mutableListOf<Pair<PlayerModel, List<GameModel>>>()
 
         allPlayersList.forEach { player ->
-            val playedGames = allGamesList.filter { it.firstPlayer == player || it.secondPlayer == player  }
+            val playedGames =
+                allGamesList.filter { it.firstPlayer == player || it.secondPlayer == player }
             val wonGames = playedGames.filter {
-                if(it.firstPlayer == player){
+                if (it.firstPlayer == player) {
                     it.firstPlayerScore > it.secondPlayerScore
-                }else{
+                } else {
                     it.secondPlayerScore > it.firstPlayerScore
                 }
             }
@@ -113,11 +114,12 @@ class LeaderListVM @Inject constructor(
     private fun sortPlayersByGames(
         allPlayersList: List<PlayerModel>,
         allGamesList: List<GameModel>
-    ) : List<PlayerModel> {
+    ): List<PlayerModel> {
         val playerAndGamesPair = mutableListOf<Pair<PlayerModel, List<GameModel>>>()
 
         allPlayersList.forEach { player ->
-            val playedGames = allGamesList.filter { it.firstPlayer == player || it.secondPlayer == player }
+            val playedGames =
+                allGamesList.filter { it.firstPlayer == player || it.secondPlayer == player }
             playerAndGamesPair.add(Pair(player, playedGames))
         }
 
@@ -128,18 +130,18 @@ class LeaderListVM @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        if(compositeDisposable != null){
+        if (compositeDisposable != null) {
             compositeDisposable?.clear()
             compositeDisposable = null
         }
     }
 
-
-    sealed class LeadersViewState{
+    sealed class LeadersViewState {
         object Default : LeadersViewState()
         data class PlayersList(var playersList: List<PlayerModel>) : LeadersViewState()
     }
-    sealed class LeadersEvent{
+
+    sealed class LeadersEvent {
         data class ShowSortTypeDialog(val selectedSortType: String) : LeadersEvent()
         data class Error(var message: String?) : LeadersEvent()
     }

@@ -6,22 +6,27 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.example.tmg_test.R
+import com.example.tmg_test.databinding.FragmentLeaderListBinding
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.ui.adapter.PlayersListAdapter
 import com.example.tmg_test.ui.base.BaseFragment
 import com.example.tmg_test.ui.dialog.SortTypeDialog
 import com.example.tmg_test.utils.observeFlow
-import kotlinx.android.synthetic.main.fragment_leader_list.*
-
 
 class LeaderListFragment : BaseFragment() {
 
-    val vm: LeaderListVM by viewModels()
+    val vm: LeaderListViewModel by viewModels()
+    lateinit var bind: FragmentLeaderListBinding
 
     private lateinit var playersAdapter: PlayersListAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_leader_list, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        bind = FragmentLeaderListBinding.inflate(inflater, container, false)
+        return bind.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,24 +46,24 @@ class LeaderListFragment : BaseFragment() {
         observeFlow(vm.event, ::event)
     }
 
-    private fun event(event: LeaderListVM.LeadersEvent?) {
-        when(event){
-            is LeaderListVM.LeadersEvent.ShowSortTypeDialog -> {
+    private fun event(event: LeaderListViewModel.LeadersEvent?) {
+        when (event) {
+            is LeaderListViewModel.LeadersEvent.ShowSortTypeDialog -> {
                 val dialog = SortTypeDialog(event.selectedSortType) { selectedSortType ->
                     vm.onSortTypeSaved(selectedSortType)
                 }
                 dialog.show(childFragmentManager, dialog.tag)
             }
-            is LeaderListVM.LeadersEvent.Error -> {
+            is LeaderListViewModel.LeadersEvent.Error -> {
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun render(viewState: LeaderListVM.LeadersViewState?) {
-        when(viewState){
-            is LeaderListVM.LeadersViewState.PlayersList -> {
+    private fun render(viewState: LeaderListViewModel.LeadersViewState?) {
+        when (viewState) {
+            is LeaderListViewModel.LeadersViewState.PlayersList -> {
                 playersAdapter.items = viewState.playersList
                 playersAdapter.notifyDataSetChanged()
             }
@@ -68,7 +73,7 @@ class LeaderListFragment : BaseFragment() {
     private fun initPlayersRecycler(playerList: List<PlayerModel> = listOf()) {
         playersAdapter = PlayersListAdapter(playerList)
 
-        vLeaderListFragmentRecycler.adapter = playersAdapter
+        bind.leaderListFragmentRecycler.adapter = playersAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -86,6 +91,4 @@ class LeaderListFragment : BaseFragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
 }

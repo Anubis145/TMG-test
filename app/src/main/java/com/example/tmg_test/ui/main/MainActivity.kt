@@ -1,22 +1,23 @@
 package com.example.tmg_test.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.tmg_test.R
+import com.example.tmg_test.databinding.ActivityMainBinding
 import com.example.tmg_test.ui.base.BaseActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
-    val vm: MainVM by viewModels()
+    val vm: MainViewModel by viewModels()
+    lateinit var bind: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        bind = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(bind.root)
 
-        vMainActivityBottomnav.setupWithNavController(findNavController(R.id.nav_host_fragment))
+        bind.mainActivityBottomnav.setupWithNavController(findNavController(R.id.nav_host_fragment))
     }
 }

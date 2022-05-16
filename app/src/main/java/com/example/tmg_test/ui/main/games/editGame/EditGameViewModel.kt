@@ -1,11 +1,11 @@
 package com.example.tmg_test.ui.main.games.editGame
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmg_test.R
 import com.example.tmg_test.model.GameModel
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.repository.*
-import com.example.tmg_test.ui.base.BaseViewModel
 import com.example.tmg_test.utils.EditScreenState
 import com.example.tmg_test.utils.emitFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,13 +17,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EditGameVM @Inject constructor(
+class EditGameViewModel @Inject constructor(
     private val localRepository: LocalRepository,
     private val schedulersRepository: SchedulersRepository,
     private val gamesRepository: GamesRepository,
     private val playersRepository: PlayersRepository,
     private val resourceRepository: ResourceRepository,
-) : BaseViewModel() {
+) : ViewModel() {
     private val _viewState = MutableStateFlow<EditGameViewState>(EditGameViewState.Default)
     val viewState = _viewState.asSharedFlow()
 
@@ -33,6 +33,7 @@ class EditGameVM @Inject constructor(
     private var compositeDisposable: CompositeDisposable? = null
     private var selectedGameModel = localRepository.selectedEditGameRecord
     private var state = EditScreenState.EDIT
+    private var allPlayersList = listOf<PlayerModel>()
 
     private var selectedFirstPlayer: PlayerModel? = selectedGameModel?.firstPlayer
     private var selectedSecondPlayer: PlayerModel? = selectedGameModel?.secondPlayer
@@ -52,15 +53,17 @@ class EditGameVM @Inject constructor(
             .compose(schedulersRepository.flowableTransformer())
             .subscribe({
                 if (state == EditScreenState.EDIT) {
+                    allPlayersList = it
+
                     emitFlow(
                         _viewState,
                         EditGameViewState.SelectedEditGameModel(
                             selectedModel = localRepository.selectedEditGameRecord!!,
-                            playersList = it
+                            playersListNames = it.map { it.name }
                         )
                     )
-                }else{
-                    emitFlow(_viewState, EditGameViewState.PlayersList(playersList = it))
+                } else {
+                    emitFlow(_viewState, EditGameViewState.PlayersList(playersListNames = it.map { it.name }))
                 }
             }, ::error)
         compositeDisposable?.add(disposable)
@@ -109,25 +112,34 @@ class EditGameVM @Inject constructor(
         var result = true
         if (selectedFirstPlayer == null || selectedSecondPlayer == null) {
             result = false
-            emitFlow(_event, EditGameEvent.Error(resourceRepository.getString(R.string.error_you_should_choose_two_players)))
+            emitFlow(
+                _event,
+                EditGameEvent.Error(resourceRepository.getString(R.string.error_you_should_choose_two_players))
+            )
         }
-        if(selectedFirstPlayer?.id == selectedSecondPlayer?.id){
+        if (selectedFirstPlayer?.id == selectedSecondPlayer?.id) {
             result = false
-            emitFlow(_event, EditGameEvent.Error(resourceRepository.getString(R.string.error_choose_different_players)))
+            emitFlow(
+                _event,
+                EditGameEvent.Error(resourceRepository.getString(R.string.error_choose_different_players))
+            )
         }
-        if(firstPlayerScore == 0 && secondPlayerScore == 0){
+        if (firstPlayerScore == 0 && secondPlayerScore == 0) {
             result = false
-            emitFlow(_event, EditGameEvent.Error(resourceRepository.getString(R.string.error_one_player_one_score_point)))
+            emitFlow(
+                _event,
+                EditGameEvent.Error(resourceRepository.getString(R.string.error_one_player_one_score_point))
+            )
         }
         return result
     }
 
-    fun onFirstPlayerSelect(selectedPlayer: PlayerModel) {
-        selectedFirstPlayer = selectedPlayer
+    fun onFirstPlayerSelect(selectedPlayerPos: Int) {
+        selectedFirstPlayer = allPlayersList[selectedPlayerPos]
     }
 
-    fun onSecondPlayerSelect(selectedPlayer: PlayerModel) {
-        selectedSecondPlayer = selectedPlayer
+    fun onSecondPlayerSelect(selectedPlayerPos: Int) {
+        selectedSecondPlayer = allPlayersList[selectedPlayerPos]
     }
 
     fun onFirstPlayerScoreChange(score: String) {
@@ -154,15 +166,13 @@ class EditGameVM @Inject constructor(
         }
     }
 
-
     sealed class EditGameViewState {
         object Default : EditGameViewState()
         data class SelectedEditGameModel(
             var selectedModel: GameModel,
-            var playersList: List<PlayerModel>
+            var playersListNames: List<String>
         ) : EditGameViewState()
-
-        data class PlayersList(var playersList: List<PlayerModel>) : EditGameViewState()
+        data class PlayersList(var playersListNames: List<String>) : EditGameViewState()
     }
 
     sealed class EditGameEvent {

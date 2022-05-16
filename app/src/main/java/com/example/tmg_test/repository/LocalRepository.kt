@@ -97,13 +97,8 @@ open class LocalRepository @Inject constructor(@ApplicationContext context: Cont
         const val PREFS = "PREFS"
     }
 
-
-
-
     var isSignedIn by BooleanPreferenceDelegate()
-
     var leaderSortType by StringPreferenceDelegate(SORT_TYPE_WINS)
-
 
     var selectedEditGameRecord by JsonPreferenceDelegate(GameModel::class.java)
 }
