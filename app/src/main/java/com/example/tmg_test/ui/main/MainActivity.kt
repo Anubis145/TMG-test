@@ -17,7 +17,10 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         bind = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bind.root)
+    }
 
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
         bind.mainActivityBottomnav.setupWithNavController(findNavController(R.id.nav_host_fragment))
     }
 }
