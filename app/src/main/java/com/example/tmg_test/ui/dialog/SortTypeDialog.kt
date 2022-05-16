@@ -4,18 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.example.tmg_test.R
 import com.example.tmg_test.databinding.DialogSortTypeBinding
 import com.example.tmg_test.ui.base.BaseDialogFragment
+import com.example.tmg_test.ui.main.leaderList.LeaderListViewModel
 import com.example.tmg_test.utils.SORT_TYPE_GAMES
 import com.example.tmg_test.utils.SORT_TYPE_WINS
 
-class SortTypeDialog(
-    var selectedSortType: String,
-    val savedCallback: (savedSortType: String) -> Unit
-) : BaseDialogFragment() {
+class SortTypeDialog() : BaseDialogFragment() {
 
-    private var newSelectedSortType: String = selectedSortType
+    private val leaderListVM: LeaderListViewModel by activityViewModels()
+    private var newSelectedSortType: String = SORT_TYPE_WINS
     lateinit var bind: DialogSortTypeBinding
 
     override fun onCreateView(
@@ -36,7 +37,7 @@ class SortTypeDialog(
 
     private fun initView() {
         bind.sortTypeDialogToggleGroup.check(
-            if (selectedSortType == SORT_TYPE_WINS)
+            if (localRepository.leaderSortType == SORT_TYPE_WINS)
                 R.id.sortTypeDialogWinsCheck
             else
                 R.id.sortTypeDialogGamesCheck
@@ -49,7 +50,7 @@ class SortTypeDialog(
 
         bind.sortTypeDialogImageClose.setOnClickListener { dismiss() }
         bind.sortTypeDialogSave.setOnClickListener {
-            savedCallback(newSelectedSortType)
+            leaderListVM.onSortTypeChange(newSelectedSortType)
             dismiss()
         }
         bind.sortTypeDialogButtonClose.setOnClickListener { dismiss() }

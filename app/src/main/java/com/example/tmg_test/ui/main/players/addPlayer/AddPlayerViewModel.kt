@@ -25,11 +25,7 @@ class AddPlayerViewModel @Inject constructor(
     private val _event = MutableSharedFlow<AddPlayerEvent>()
     val event = _event.asSharedFlow()
 
-    private var compositeDisposable: CompositeDisposable? = null
-
-    init {
-        compositeDisposable = CompositeDisposable()
-    }
+    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun onSaveClick(name: String) {
         if (!isFieldsValid(name)) return
@@ -73,10 +69,7 @@ class AddPlayerViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        if (compositeDisposable != null) {
-            compositeDisposable?.clear()
-            compositeDisposable = null
-        }
+        compositeDisposable.clear()
     }
 
     sealed class AddPlayerEvent {

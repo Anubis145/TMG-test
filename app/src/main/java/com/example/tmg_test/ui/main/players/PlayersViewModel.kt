@@ -27,11 +27,7 @@ class PlayersViewModel @Inject constructor(
     private val _event = MutableSharedFlow<PlayersEvent>()
     val event = _event.asSharedFlow()
 
-    private var compositeDisposable: CompositeDisposable? = null
-
-    init {
-        compositeDisposable = CompositeDisposable()
-    }
+    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun onResume() {
         getPlayersList()
@@ -56,10 +52,7 @@ class PlayersViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        if (compositeDisposable != null) {
-            compositeDisposable?.clear()
-            compositeDisposable = null
-        }
+        compositeDisposable.clear()
     }
 
     sealed class PlayersViewState {

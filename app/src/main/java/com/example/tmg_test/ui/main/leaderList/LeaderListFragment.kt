@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.tmg_test.R
 import com.example.tmg_test.databinding.FragmentLeaderListBinding
@@ -15,7 +16,7 @@ import com.example.tmg_test.utils.observeFlow
 
 class LeaderListFragment : BaseFragment() {
 
-    val vm: LeaderListViewModel by viewModels()
+    val vm: LeaderListViewModel by activityViewModels()
     lateinit var bind: FragmentLeaderListBinding
 
     private lateinit var playersAdapter: PlayersListAdapter
@@ -49,9 +50,7 @@ class LeaderListFragment : BaseFragment() {
     private fun event(event: LeaderListViewModel.LeadersEvent?) {
         when (event) {
             is LeaderListViewModel.LeadersEvent.ShowSortTypeDialog -> {
-                val dialog = SortTypeDialog(event.selectedSortType) { selectedSortType ->
-                    vm.onSortTypeSaved(selectedSortType)
-                }
+                val dialog = SortTypeDialog()
                 dialog.show(childFragmentManager, dialog.tag)
             }
             is LeaderListViewModel.LeadersEvent.Error -> {

@@ -76,46 +76,38 @@ class EditGameFragment : BaseFragment() {
     private fun updateSecondPlayerSpinner(playerList: List<String>, selectedPlayerName: String = "") {
         secondPlayerSpinnerAdapter.clear()
         secondPlayerSpinnerAdapter.addAll(playerList)
+        secondPlayerSpinnerAdapter.notifyDataSetChanged()
         bind.editGameFragmentSecondPlayersSpinner.setSelection(playerList.indexOf(selectedPlayerName))
     }
 
     private fun updateFirstPlayerSpinner(playerList: List<String>, selectedPlayerName: String = "") {
         firstPlayerSpinnerAdapter.clear()
         firstPlayerSpinnerAdapter.addAll(playerList)
+        firstPlayerSpinnerAdapter.notifyDataSetChanged()
         bind.editGameFragmentFirstPlayersSpinner.setSelection(playerList.indexOf(selectedPlayerName))
     }
 
     private fun initSecondPlayerSpinner() {
-        secondPlayerSpinnerAdapter = ArrayAdapter(requireContext(), R.layout.spinner_custom, listOf())
+        secondPlayerSpinnerAdapter = ArrayAdapter(requireContext(), R.layout.spinner_custom, mutableListOf())
         bind.editGameFragmentSecondPlayersSpinner.adapter = secondPlayerSpinnerAdapter
 
         bind.editGameFragmentSecondPlayersSpinner.onItemSelectedListener =
             (object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     vm.onSecondPlayerSelect(position)
                 }
             })
     }
 
     private fun initFirstPlayerSpinner() {
-        firstPlayerSpinnerAdapter = ArrayAdapter(requireContext(), R.layout.spinner_custom, listOf())
+        firstPlayerSpinnerAdapter = ArrayAdapter(requireContext(), R.layout.spinner_custom, mutableListOf())
         bind.editGameFragmentFirstPlayersSpinner.adapter = firstPlayerSpinnerAdapter
 
         bind.editGameFragmentFirstPlayersSpinner.onItemSelectedListener =
             (object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     vm.onFirstPlayerSelect(position)
                 }
             })

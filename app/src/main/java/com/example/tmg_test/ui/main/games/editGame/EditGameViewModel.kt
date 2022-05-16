@@ -30,7 +30,7 @@ class EditGameViewModel @Inject constructor(
     private val _event = MutableSharedFlow<EditGameEvent>()
     val event = _event.asSharedFlow()
 
-    private var compositeDisposable: CompositeDisposable? = null
+    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var selectedGameModel = localRepository.selectedEditGameRecord
     private var state = EditScreenState.EDIT
     private var allPlayersList = listOf<PlayerModel>()
@@ -43,18 +43,18 @@ class EditGameViewModel @Inject constructor(
     init {
         state =
             if (localRepository.selectedEditGameRecord == null) EditScreenState.CREATE else EditScreenState.EDIT
-        compositeDisposable = CompositeDisposable()
 
-        initView()
+        initData()
     }
 
-    private fun initView() {
+    private fun initData() {
         val disposable = playersRepository.getAll()
             .compose(schedulersRepository.flowableTransformer())
             .subscribe({
-                if (state == EditScreenState.EDIT) {
-                    allPlayersList = it
 
+                allPlayersList = it
+
+                if (state == EditScreenState.EDIT) {
                     emitFlow(
                         _viewState,
                         EditGameViewState.SelectedEditGameModel(
@@ -66,7 +66,7 @@ class EditGameViewModel @Inject constructor(
                     emitFlow(_viewState, EditGameViewState.PlayersList(playersListNames = it.map { it.name }))
                 }
             }, ::error)
-        compositeDisposable?.add(disposable)
+        compositeDisposable.add(disposable)
 
     }
 
@@ -87,7 +87,7 @@ class EditGameViewModel @Inject constructor(
                     .subscribe({
                         emitFlow(_event, EditGameEvent.CloseFragment)
                     }, ::error)
-                compositeDisposable?.add(disposable)
+                compositeDisposable.add(disposable)
             }
             EditScreenState.CREATE -> {
                 val newGameModel = GameModel(
@@ -103,7 +103,7 @@ class EditGameViewModel @Inject constructor(
                     .subscribe({
                         emitFlow(_event, EditGameEvent.CloseFragment)
                     }, ::error)
-                compositeDisposable?.add(disposable)
+                compositeDisposable.add(disposable)
             }
         }
     }
@@ -135,11 +135,15 @@ class EditGameViewModel @Inject constructor(
     }
 
     fun onFirstPlayerSelect(selectedPlayerPos: Int) {
-        selectedFirstPlayer = allPlayersList[selectedPlayerPos]
+        if(allPlayersList.isNotEmpty()){
+            selectedFirstPlayer = allPlayersList[selectedPlayerPos]
+        }
     }
 
     fun onSecondPlayerSelect(selectedPlayerPos: Int) {
-        selectedSecondPlayer = allPlayersList[selectedPlayerPos]
+        if(allPlayersList.isNotEmpty()){
+            selectedSecondPlayer = allPlayersList[selectedPlayerPos]
+        }
     }
 
     fun onFirstPlayerScoreChange(score: String) {
@@ -160,10 +164,7 @@ class EditGameViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        if (compositeDisposable != null) {
-            compositeDisposable?.clear()
-            compositeDisposable = null
-        }
+        compositeDisposable.clear()
     }
 
     sealed class EditGameViewState {

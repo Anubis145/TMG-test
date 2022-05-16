@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 
 fun <T> Fragment.observeFlow(flow: Flow<T>, observer: Observer<T>){
-    this.viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+    this.viewLifecycleOwner.lifecycleScope.launchWhenResumed {
         flow.collectLatest {
             observer.onChanged(it)
         }

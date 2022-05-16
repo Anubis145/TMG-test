@@ -1,6 +1,7 @@
 package com.example.tmg_test.ui.main.leaderList
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.tmg_test.model.GameModel
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.repository.GamesRepository
@@ -15,6 +16,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,20 +33,16 @@ class LeaderListViewModel @Inject constructor(
     private val _event = MutableSharedFlow<LeadersEvent>()
     val event = _event.asSharedFlow()
 
-    private var compositeDisposable: CompositeDisposable? = null
+    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     private var allPlayersList = listOf<PlayerModel>()
     private var allGamesList = listOf<GameModel>()
 
-    init {
-        compositeDisposable = CompositeDisposable()
-    }
-
     fun onResume() {
-        initView()
+        initData()
     }
 
-    private fun initView() {
+    private fun initData() {
         getLeadersList(localRepository.leaderSortType)
     }
 
@@ -52,7 +50,7 @@ class LeaderListViewModel @Inject constructor(
         emitFlow(_event, LeadersEvent.ShowSortTypeDialog(localRepository.leaderSortType))
     }
 
-    fun onSortTypeSaved(newSelectedSortType: String) {
+    fun onSortTypeChange(newSelectedSortType: String) {
         localRepository.leaderSortType = newSelectedSortType
         getLeadersList(newSelectedSortType)
     }
@@ -65,21 +63,25 @@ class LeaderListViewModel @Inject constructor(
                 gamesRepository.getAll()
             }
             .subscribe({
-                allGamesList = it
+                viewModelScope.launch {
+                    allGamesList = it
 
-                val leadersList: List<PlayerModel> = when (newSelectedSortType) {
-                    SORT_TYPE_WINS -> {
-                        sortPlayersByWins(allPlayersList, allGamesList)
+                    val leadersList: List<PlayerModel> = when (newSelectedSortType) {
+                        SORT_TYPE_WINS -> {
+                            sortPlayersByWins(allPlayersList, allGamesList)
+                        }
+                        SORT_TYPE_GAMES -> {
+                            sortPlayersByGames(allPlayersList, allGamesList)
+                        }
+                        else -> listOf()
                     }
-                    SORT_TYPE_GAMES -> {
-                        sortPlayersByGames(allPlayersList, allGamesList)
-                    }
-                    else -> listOf()
+
+                    val playerListViewState = LeadersViewState.PlayersList(leadersList)
+
+                    _viewState.emit(playerListViewState)
                 }
-
-                emitFlow(_viewState, LeadersViewState.PlayersList(leadersList))
             }, ::error)
-        compositeDisposable?.add(disposable)
+        compositeDisposable.add(disposable)
     }
 
     private fun error(t: Throwable) {
@@ -130,10 +132,7 @@ class LeaderListViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        if (compositeDisposable != null) {
-            compositeDisposable?.clear()
-            compositeDisposable = null
-        }
+        compositeDisposable.clear()
     }
 
     sealed class LeadersViewState {

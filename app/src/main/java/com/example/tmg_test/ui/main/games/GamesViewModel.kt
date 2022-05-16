@@ -30,10 +30,9 @@ class GamesViewModel @Inject constructor(
     private val _event = MutableSharedFlow<GamesEvent>()
     val event = _event.asSharedFlow()
 
-    private var compositeDisposable: CompositeDisposable? = null
+    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     init {
-        compositeDisposable = CompositeDisposable()
         getGamesRecords()
     }
 
@@ -62,10 +61,7 @@ class GamesViewModel @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        if (compositeDisposable != null) {
-            compositeDisposable?.clear()
-            compositeDisposable = null
-        }
+        compositeDisposable.clear()
     }
 
     sealed class GamesViewState {
