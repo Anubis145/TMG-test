@@ -1,5 +1,7 @@
 package com.example.tmg_test.ui.main.games
 
+import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmg_test.R
@@ -7,6 +9,7 @@ import com.example.tmg_test.model.GameModel
 import com.example.tmg_test.repository.GamesRepository
 import com.example.tmg_test.repository.LocalRepository
 import com.example.tmg_test.repository.SchedulersRepository
+import com.example.tmg_test.utils.EDIT_GAME_EXTRA_SELECTED_GAME
 import com.example.tmg_test.utils.emitFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -37,7 +40,6 @@ class GamesViewModel @Inject constructor(
     }
 
     fun onRecordGameClick() = viewModelScope.launch {
-        localRepository.selectedEditGameRecord = null
         _event.emit(GamesEvent.OpenFragment(R.id.editGameFragment))
     }
 
@@ -55,8 +57,8 @@ class GamesViewModel @Inject constructor(
     }
 
     fun onGameItemClick(gameModel: GameModel) = viewModelScope.launch {
-        localRepository.selectedEditGameRecord = gameModel
-        _event.emit(GamesEvent.OpenFragment(R.id.editGameFragment))
+        val args = bundleOf(Pair(EDIT_GAME_EXTRA_SELECTED_GAME, gameModel))
+        _event.emit(GamesEvent.OpenFragment(R.id.editGameFragment, args))
     }
 
     override fun onCleared() {
@@ -70,7 +72,7 @@ class GamesViewModel @Inject constructor(
     }
 
     sealed class GamesEvent {
-        data class OpenFragment(var fragmentId: Int) : GamesEvent()
+        data class OpenFragment(var fragmentId: Int, var args: Bundle? = null) : GamesEvent()
         data class Error(var message: String?) : GamesEvent()
     }
 }

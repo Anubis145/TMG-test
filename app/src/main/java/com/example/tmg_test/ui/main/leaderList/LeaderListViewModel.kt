@@ -38,7 +38,7 @@ class LeaderListViewModel @Inject constructor(
     private var allPlayersList = listOf<PlayerModel>()
     private var allGamesList = listOf<GameModel>()
 
-    fun onResume() {
+    init {
         initData()
     }
 

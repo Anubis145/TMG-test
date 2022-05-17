@@ -45,7 +45,7 @@ class GamesFragment : BaseFragment() {
             is GamesViewModel.GamesEvent.Error ->
                 Toast.makeText(requireContext(), event.message, Toast.LENGTH_SHORT).show()
             is GamesViewModel.GamesEvent.OpenFragment -> {
-                findNavController().navigate(R.id.gamesFragment_to_recordGame)
+                findNavController().navigate(R.id.gamesFragment_to_recordGame, event.args)
             }
         }
     }

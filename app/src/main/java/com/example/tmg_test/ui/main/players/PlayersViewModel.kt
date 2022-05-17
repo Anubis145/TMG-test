@@ -29,7 +29,7 @@ class PlayersViewModel @Inject constructor(
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    fun onResume() {
+    init {
         getPlayersList()
     }
 

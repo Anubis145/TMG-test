@@ -1,11 +1,14 @@
 package com.example.tmg_test.ui.main.games.editGame
 
+import android.os.Bundle
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmg_test.R
 import com.example.tmg_test.model.GameModel
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.repository.*
+import com.example.tmg_test.utils.EDIT_GAME_EXTRA_SELECTED_GAME
 import com.example.tmg_test.utils.EditScreenState
 import com.example.tmg_test.utils.emitFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +26,7 @@ class EditGameViewModel @Inject constructor(
     private val gamesRepository: GamesRepository,
     private val playersRepository: PlayersRepository,
     private val resourceRepository: ResourceRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _viewState = MutableStateFlow<EditGameViewState>(EditGameViewState.Default)
     val viewState = _viewState.asSharedFlow()
@@ -31,7 +35,7 @@ class EditGameViewModel @Inject constructor(
     val event = _event.asSharedFlow()
 
     private var compositeDisposable: CompositeDisposable = CompositeDisposable()
-    private var selectedGameModel = localRepository.selectedEditGameRecord
+    private var selectedGameModel: GameModel? = null
     private var state = EditScreenState.EDIT
     private var allPlayersList = listOf<PlayerModel>()
 
@@ -41,13 +45,13 @@ class EditGameViewModel @Inject constructor(
     private var secondPlayerScore = selectedGameModel?.secondPlayerScore ?: 0
 
     init {
-        state =
-            if (localRepository.selectedEditGameRecord == null) EditScreenState.CREATE else EditScreenState.EDIT
-
         initData()
     }
 
     private fun initData() {
+        selectedGameModel = savedStateHandle.get(EDIT_GAME_EXTRA_SELECTED_GAME) as GameModel?
+        state = if (selectedGameModel == null) EditScreenState.CREATE else EditScreenState.EDIT
+
         val disposable = playersRepository.getAll()
             .compose(schedulersRepository.flowableTransformer())
             .subscribe({
@@ -58,7 +62,7 @@ class EditGameViewModel @Inject constructor(
                     emitFlow(
                         _viewState,
                         EditGameViewState.SelectedEditGameModel(
-                            selectedModel = localRepository.selectedEditGameRecord!!,
+                            selectedModel = selectedGameModel!!,
                             playersListNames = it.map { it.name }
                         )
                     )
@@ -67,7 +71,6 @@ class EditGameViewModel @Inject constructor(
                 }
             }, ::error)
         compositeDisposable.add(disposable)
-
     }
 
     fun onSaveClick() {
@@ -75,7 +78,7 @@ class EditGameViewModel @Inject constructor(
 
         when (state) {
             EditScreenState.EDIT -> {
-                val selectedGame = localRepository.selectedEditGameRecord!!
+                val selectedGame = selectedGameModel!!
 
                 selectedGame.firstPlayer = selectedFirstPlayer!!
                 selectedGame.secondPlayer = selectedSecondPlayer!!

@@ -34,11 +34,6 @@ class PlayersFragment : BaseFragment() {
         initListeners()
     }
 
-    override fun onResume() {
-        super.onResume()
-        vm.onResume()
-    }
-
     private fun observeViewModel() {
         observeFlow(vm.viewState, ::render)
         observeFlow(vm.event, ::event)
