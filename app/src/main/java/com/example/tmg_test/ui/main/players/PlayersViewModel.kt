@@ -6,7 +6,9 @@ import com.example.tmg_test.R
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.repository.PlayersRepository
 import com.example.tmg_test.repository.SchedulersRepository
+import com.example.tmg_test.ui.base.BaseViewModel
 import com.example.tmg_test.utils.emitFlow
+import com.example.tmg_test.utils.extension.addToComposite
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +21,7 @@ import javax.inject.Inject
 class PlayersViewModel @Inject constructor(
     private val playersRepository: PlayersRepository,
     private val schedulersRepository: SchedulersRepository,
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _viewState = MutableStateFlow<PlayersViewState>(PlayersViewState.Default)
     val viewState = _viewState.asSharedFlow()
@@ -27,19 +29,16 @@ class PlayersViewModel @Inject constructor(
     private val _event = MutableSharedFlow<PlayersEvent>()
     val event = _event.asSharedFlow()
 
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
-
     init {
         getPlayersList()
     }
 
     private fun getPlayersList() {
-        val disposable = playersRepository.getAll()
+        playersRepository.getAll()
             .compose(schedulersRepository.flowableTransformer())
             .subscribe({
                 emitFlow(_viewState, PlayersViewState.PlayersList(it))
-            }, ::error)
-        compositeDisposable?.add(disposable)
+            }, ::error).addToComposite(compositeDisposable)
     }
 
     private fun error(t: Throwable) {
@@ -48,11 +47,6 @@ class PlayersViewModel @Inject constructor(
 
     fun onAddPlayerClick() = viewModelScope.launch {
         _event.emit(PlayersEvent.OpenFragment(R.id.addPlayerFragment))
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
     }
 
     sealed class PlayersViewState {

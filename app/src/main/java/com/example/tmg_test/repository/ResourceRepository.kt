@@ -7,4 +7,3 @@ interface ResourceRepository {
     fun getColor(resId: Int): Int
     fun getDrawable(resId: Int): Drawable
 }
-

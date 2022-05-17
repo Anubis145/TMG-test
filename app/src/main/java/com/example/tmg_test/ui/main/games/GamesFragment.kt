@@ -17,9 +17,9 @@ import com.example.tmg_test.utils.observeFlow
 class GamesFragment : BaseFragment() {
 
     val vm: GamesViewModel by viewModels()
-    lateinit var bind: FragmentGamesBinding
+    private lateinit var bind: FragmentGamesBinding
 
-    lateinit var gamesAdapter: GamesAdapter
+    private lateinit var gamesAdapter: GamesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,

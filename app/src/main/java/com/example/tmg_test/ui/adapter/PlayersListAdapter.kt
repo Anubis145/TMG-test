@@ -11,8 +11,6 @@ class PlayersListAdapter(
     var items: List<PlayerModel>,
 ) : RecyclerView.Adapter<PlayersListAdapter.PlayersListViewHolder>() {
 
-    lateinit var bind: ItemPlayersListBinding
-
     init {
         setHasStableIds(true)
     }
@@ -26,7 +24,6 @@ class PlayersListAdapter(
 
     override fun onBindViewHolder(holder: PlayersListViewHolder, position: Int) {
         val item = items[position]
-
         holder.bind(item)
     }
 

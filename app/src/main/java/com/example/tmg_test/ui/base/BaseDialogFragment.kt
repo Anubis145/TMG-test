@@ -5,16 +5,10 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.example.tmg_test.repository.GamesRepository
-import com.example.tmg_test.repository.LocalRepository
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
-
 
 @AndroidEntryPoint
 abstract class BaseDialogFragment : DialogFragment() {
-    @Inject
-    lateinit var localRepository: LocalRepository
 
     override fun onResume() {
         super.onResume()

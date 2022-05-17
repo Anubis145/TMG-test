@@ -5,7 +5,6 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-
 fun <T> Fragment.observeFlow(flow: Flow<T>, observer: Observer<T>){
     this.viewLifecycleOwner.lifecycleScope.launchWhenResumed {
         flow.collectLatest {

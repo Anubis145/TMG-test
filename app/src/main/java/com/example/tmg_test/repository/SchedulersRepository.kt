@@ -19,25 +19,10 @@ class SchedulersRepository(private val uiScheduler: Scheduler, private val ioSch
                 .observeOn(uiScheduler)
         }
 
-    fun <T> maybeTransformer(): MaybeTransformer<T, T> =
-        MaybeTransformer { upstream ->
-            upstream
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler)
-        }
-
     fun completableTransformer(): CompletableTransformer =
         CompletableTransformer { upstream ->
             upstream
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
         }
-
-    fun <T> computationAsyncTransformer(): ObservableTransformer<T, T> =
-        ObservableTransformer { upstream ->
-            upstream
-                .subscribeOn(ioScheduler)
-                .observeOn(Schedulers.computation())
-        }
 }
-

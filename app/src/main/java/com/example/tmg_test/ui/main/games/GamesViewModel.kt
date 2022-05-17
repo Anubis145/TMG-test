@@ -2,17 +2,16 @@ package com.example.tmg_test.ui.main.games
 
 import android.os.Bundle
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmg_test.R
 import com.example.tmg_test.model.GameModel
 import com.example.tmg_test.repository.GamesRepository
-import com.example.tmg_test.repository.LocalRepository
 import com.example.tmg_test.repository.SchedulersRepository
+import com.example.tmg_test.ui.base.BaseViewModel
 import com.example.tmg_test.utils.EDIT_GAME_EXTRA_SELECTED_GAME
 import com.example.tmg_test.utils.emitFlow
+import com.example.tmg_test.utils.extension.addToComposite
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -24,16 +23,13 @@ import javax.inject.Inject
 class GamesViewModel @Inject constructor(
     private val schedulersRepository: SchedulersRepository,
     private val gamesRepository: GamesRepository,
-    private val localRepository: LocalRepository,
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _viewState = MutableStateFlow<GamesViewState>(GamesViewState.Default)
     val viewState = _viewState.asStateFlow()
 
     private val _event = MutableSharedFlow<GamesEvent>()
     val event = _event.asSharedFlow()
-
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     init {
         getGamesRecords()
@@ -44,12 +40,11 @@ class GamesViewModel @Inject constructor(
     }
 
     private fun getGamesRecords() {
-        val disposable = gamesRepository.getAll()
+        gamesRepository.getAll()
             .compose(schedulersRepository.flowableTransformer())
             .subscribe({
                 emitFlow(_viewState, GamesViewState.GamesList(it))
-            }, ::error)
-        compositeDisposable?.add(disposable)
+            }, ::error).addToComposite(compositeDisposable)
     }
 
     private fun error(t: Throwable) = viewModelScope.launch {
@@ -59,11 +54,6 @@ class GamesViewModel @Inject constructor(
     fun onGameItemClick(gameModel: GameModel) = viewModelScope.launch {
         val args = bundleOf(Pair(EDIT_GAME_EXTRA_SELECTED_GAME, gameModel))
         _event.emit(GamesEvent.OpenFragment(R.id.editGameFragment, args))
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
     }
 
     sealed class GamesViewState {

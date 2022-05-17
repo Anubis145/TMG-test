@@ -17,7 +17,7 @@ import com.example.tmg_test.utils.observeFlow
 class LeaderListFragment : BaseFragment() {
 
     val vm: LeaderListViewModel by activityViewModels()
-    lateinit var bind: FragmentLeaderListBinding
+    private lateinit var bind: FragmentLeaderListBinding
 
     private lateinit var playersAdapter: PlayersListAdapter
 

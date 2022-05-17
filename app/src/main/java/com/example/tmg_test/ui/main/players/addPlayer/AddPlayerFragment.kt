@@ -9,13 +9,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tmg_test.databinding.FragmentAddPlayerBinding
 import com.example.tmg_test.ui.base.BaseFragment
-import com.example.tmg_test.utils.getText
+import com.example.tmg_test.utils.extension.getText
 import com.example.tmg_test.utils.observeFlow
 
 class AddPlayerFragment : BaseFragment() {
 
     val vm: AddPlayerViewModel by viewModels()
-    lateinit var bind: FragmentAddPlayerBinding
+    private lateinit var bind: FragmentAddPlayerBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,

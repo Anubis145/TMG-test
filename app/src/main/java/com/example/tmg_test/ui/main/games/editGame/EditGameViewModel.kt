@@ -1,18 +1,17 @@
 package com.example.tmg_test.ui.main.games.editGame
 
-import android.os.Bundle
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmg_test.R
 import com.example.tmg_test.model.GameModel
 import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.repository.*
+import com.example.tmg_test.ui.base.BaseViewModel
 import com.example.tmg_test.utils.EDIT_GAME_EXTRA_SELECTED_GAME
 import com.example.tmg_test.utils.EditScreenState
 import com.example.tmg_test.utils.emitFlow
+import com.example.tmg_test.utils.extension.addToComposite
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,20 +20,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditGameViewModel @Inject constructor(
-    private val localRepository: LocalRepository,
     private val schedulersRepository: SchedulersRepository,
     private val gamesRepository: GamesRepository,
     private val playersRepository: PlayersRepository,
     private val resourceRepository: ResourceRepository,
     private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : BaseViewModel() {
+
     private val _viewState = MutableStateFlow<EditGameViewState>(EditGameViewState.Default)
     val viewState = _viewState.asSharedFlow()
 
     private val _event = MutableSharedFlow<EditGameEvent>()
     val event = _event.asSharedFlow()
 
-    private var compositeDisposable: CompositeDisposable = CompositeDisposable()
     private var selectedGameModel: GameModel? = null
     private var state = EditScreenState.EDIT
     private var allPlayersList = listOf<PlayerModel>()
@@ -52,7 +50,7 @@ class EditGameViewModel @Inject constructor(
         selectedGameModel = savedStateHandle.get(EDIT_GAME_EXTRA_SELECTED_GAME) as GameModel?
         state = if (selectedGameModel == null) EditScreenState.CREATE else EditScreenState.EDIT
 
-        val disposable = playersRepository.getAll()
+        playersRepository.getAll()
             .compose(schedulersRepository.flowableTransformer())
             .subscribe({
 
@@ -69,8 +67,7 @@ class EditGameViewModel @Inject constructor(
                 } else {
                     emitFlow(_viewState, EditGameViewState.PlayersList(playersListNames = it.map { it.name }))
                 }
-            }, ::error)
-        compositeDisposable.add(disposable)
+            }, ::error).addToComposite(compositeDisposable)
     }
 
     fun onSaveClick() {
@@ -85,12 +82,11 @@ class EditGameViewModel @Inject constructor(
                 selectedGame.firstPlayerScore = firstPlayerScore
                 selectedGame.secondPlayerScore = secondPlayerScore
 
-                val disposable = gamesRepository.update(selectedGame)
+                gamesRepository.update(selectedGame)
                     .compose(schedulersRepository.completableTransformer())
                     .subscribe({
                         emitFlow(_event, EditGameEvent.CloseFragment)
-                    }, ::error)
-                compositeDisposable.add(disposable)
+                    }, ::error).addToComposite(compositeDisposable)
             }
             EditScreenState.CREATE -> {
                 val newGameModel = GameModel(
@@ -101,12 +97,11 @@ class EditGameViewModel @Inject constructor(
                     secondPlayerScore
                 )
 
-                val disposable = gamesRepository.insert(newGameModel)
+                gamesRepository.insert(newGameModel)
                     .compose(schedulersRepository.singleTransformer())
                     .subscribe({
                         emitFlow(_event, EditGameEvent.CloseFragment)
-                    }, ::error)
-                compositeDisposable.add(disposable)
+                    }, ::error).addToComposite(compositeDisposable)
             }
         }
     }
@@ -163,11 +158,6 @@ class EditGameViewModel @Inject constructor(
 
     private fun error(t: Throwable) = viewModelScope.launch {
         _event.emit(EditGameEvent.Error(t.message))
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
     }
 
     sealed class EditGameViewState {

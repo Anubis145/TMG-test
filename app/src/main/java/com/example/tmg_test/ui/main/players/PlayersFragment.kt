@@ -16,7 +16,7 @@ import com.example.tmg_test.utils.observeFlow
 class PlayersFragment : BaseFragment() {
 
     val vm: PlayersViewModel by viewModels()
-    lateinit var bind: FragmentPlayersBinding
+    private lateinit var bind: FragmentPlayersBinding
 
     private lateinit var playersAdapter: PlayersListAdapter
 

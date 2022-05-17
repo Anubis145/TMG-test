@@ -11,19 +11,18 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.tmg_test.R
 import com.example.tmg_test.databinding.FragmentEditGameBinding
-import com.example.tmg_test.model.PlayerModel
 import com.example.tmg_test.ui.base.BaseFragment
-import com.example.tmg_test.utils.doOnTextChange
+import com.example.tmg_test.utils.extension.doOnTextChange
 import com.example.tmg_test.utils.observeFlow
-import com.example.tmg_test.utils.setText
+import com.example.tmg_test.utils.extension.setText
 
 class EditGameFragment : BaseFragment() {
 
     val vm: EditGameViewModel by viewModels()
-    lateinit var bind: FragmentEditGameBinding
+    private lateinit var bind: FragmentEditGameBinding
 
-    lateinit var firstPlayerSpinnerAdapter: ArrayAdapter<String>
-    lateinit var secondPlayerSpinnerAdapter: ArrayAdapter<String>
+    private lateinit var firstPlayerSpinnerAdapter: ArrayAdapter<String>
+    private lateinit var secondPlayerSpinnerAdapter: ArrayAdapter<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,

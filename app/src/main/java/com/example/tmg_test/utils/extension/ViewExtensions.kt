@@ -1,4 +1,4 @@
-package com.example.tmg_test.utils
+package com.example.tmg_test.utils.extension
 
 import androidx.core.widget.doOnTextChanged
 import com.google.android.material.textfield.TextInputLayout
