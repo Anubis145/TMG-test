@@ -129,6 +129,7 @@ class EditGameViewModel @Inject constructor(
                 EditGameEvent.Error(resourceRepository.getString(R.string.error_one_player_one_score_point))
             )
         }
+
         return result
     }
 

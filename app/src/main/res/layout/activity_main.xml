@@ -17,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/dashboard_navigation" />
 
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainActivityBottomnav"
         android:layout_width="match_parent"

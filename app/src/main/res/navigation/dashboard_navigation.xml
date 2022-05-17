@@ -14,19 +14,11 @@
     <fragment
         android:id="@+id/gamesFragment"
         android:name="com.example.tmg_test.ui.main.games.GamesFragment"
-        android:label="GamesFragment" >
-        <action
-            android:id="@+id/gamesFragment_to_recordGame"
-            app:destination="@id/editGameFragment" />
-    </fragment>
+        android:label="GamesFragment" />
     <fragment
         android:id="@+id/playersFragment"
         android:name="com.example.tmg_test.ui.main.players.PlayersFragment"
-        android:label="PlayersFragment" >
-        <action
-            android:id="@+id/playersFragment_to_addPlayerFragment"
-            app:destination="@id/addPlayerFragment" />
-    </fragment>
+        android:label="PlayersFragment" />
     <fragment
         android:id="@+id/addPlayerFragment"
         android:name="com.example.tmg_test.ui.main.players.addPlayer.AddPlayerFragment"
